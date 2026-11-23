@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-canvas: #FFFDFB;
+  --color-surface: #FFFFFF;
+  --color-surface-warm: #FFF4F7;
+  --color-rose-soft: #FCE6EE;
+  --color-rose-muted: #EAB8C9;
+  --color-rose-deep: #B8295B;
+  --color-rose-dark: #911C45;
+  --color-rose-gold: #C78A47;
+  --color-rose-gold-light: #E5B47D;
+  --color-ink: #2A151D;
+  --color-ink-muted: #6E4B57;
+  --color-border-hairline: #F3D5DF;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+  }
+
+  h1, h2, h3, .font-serif-display {
+    font-family: var(--font-display);
+  }
+
+  button, a, input, select, textarea {
+    &:focus-visible {
+      outline: 2px solid var(--color-rose-deep);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

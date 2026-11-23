@@ -1,0 +1,582 @@
+// Archivo principal de SASS: importa variables y mixins, aplica anidamiento y diseño Mobile-First
+@use 'variables' as v;
+@use 'mixins' as m;
+
+// Reset y prevención de desbordes horizontales
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+	scroll-behavior: smooth;
+	overflow-x: hidden;
+}
+
+body.lg-body {
+	font-family: v.$font-sans;
+	color: v.$color-texto;
+	background-color: v.$color-crema;
+	line-height: 1.6;
+	overflow-x: hidden;
+}
+
+// Regla obligatoria para imágenes responsivas sin pérdida de proporción
+img,
+.lg-img-fluid {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: v.$font-serif;
+	color: v.$color-texto;
+	font-weight: 600;
+}
+
+h1 {
+	font-size: clamp(2.1rem, 4vw, 3.4rem);
+	line-height: 1.1;
+}
+
+h2 {
+	font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+h3 {
+	font-size: 1.35rem;
+}
+
+// Barra superior informativa
+.lg-topbar {
+	background: linear-gradient(90deg, v.$color-rosa-profundo 0%, v.$color-rosa-oscuro 50%, v.$color-rosa-profundo 100%);
+	color: v.$color-blanco;
+	padding: 0.5rem 0;
+	text-align: center;
+
+	&__text {
+		margin: 0;
+		font-size: 0.78rem;
+		letter-spacing: 0.02em;
+	}
+}
+
+// Header dinámico (se transforma mediante CSSOM al hacer scroll)
+.lg-header {
+	position: sticky;
+	top: 0;
+	z-index: 1030;
+	background-color: rgba(252, 249, 246, 0.95);
+	border-bottom: 1px solid v.$color-borde;
+	@include m.transition-smooth(background-color box-shadow padding);
+
+	&.is-scrolled {
+		background-color: v.$color-blanco;
+		box-shadow: 0 8px 24px rgba(35, 27, 28, 0.08);
+	}
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 4.25rem;
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+	}
+}
+
+.lg-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	text-decoration: none;
+	color: v.$color-texto;
+
+	&__mark {
+		color: v.$color-rose-gold;
+		font-size: 1.25rem;
+	}
+
+	&__name {
+		font-family: v.$font-serif;
+		font-size: 1.65rem;
+		font-weight: 600;
+	}
+}
+
+// Navegación Mobile-First con menú hamburguesa
+.lg-nav {
+	position: fixed;
+	inset: 4.25rem 0 0 0;
+	background-color: v.$color-crema;
+	padding: 2rem 1.5rem;
+	transform: translateX(-100%);
+	@include m.transition-smooth(transform);
+	z-index: 1020;
+
+	&.is-open {
+		transform: translateX(0);
+	}
+
+	&__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	&__link {
+		text-decoration: none;
+		color: v.$color-texto;
+		font-weight: 500;
+		font-size: 1.05rem;
+
+		&:hover {
+			color: v.$color-rosa-oscuro;
+		}
+	}
+
+	/* Aquí se usa un mixin para el breakpoint lg (escritorio) */
+	@include m.respond-to(lg) {
+		position: static;
+		transform: none;
+		background: transparent;
+		padding: 0;
+
+		&__list {
+			flex-direction: row;
+			align-items: center;
+			gap: 1.75rem;
+		}
+
+		&__link {
+			font-size: 0.92rem;
+		}
+	}
+}
+
+.lg-hamburger {
+	display: inline-flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	width: 2.5rem;
+	height: 2.5rem;
+	background: v.$color-blanco;
+	border: 1px solid v.$color-borde;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	cursor: pointer;
+
+	&__line {
+		width: 100%;
+		height: 2px;
+		background-color: v.$color-texto;
+		@include m.transition-smooth(transform opacity);
+	}
+
+	@include m.respond-to(lg) {
+		display: none;
+	}
+}
+
+// Botones reutilizables
+.lg-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.75rem 1.4rem;
+	font-size: 0.9rem;
+	font-weight: 600;
+	border-radius: 0.5rem;
+	text-decoration: none;
+	cursor: pointer;
+	border: 1px solid transparent;
+	@include m.transition-smooth(background-color color border-color transform);
+
+	&--primary {
+		background-color: v.$color-rosa-oscuro;
+		color: v.$color-blanco;
+
+		&:hover {
+			background-color: v.$color-rosa-profundo;
+			color: v.$color-blanco;
+		}
+	}
+
+	&--outline {
+		background-color: v.$color-blanco;
+		color: v.$color-texto;
+		border-color: #dec4c6;
+
+		&:hover {
+			background-color: v.$color-rosa-suave;
+			color: v.$color-rosa-oscuro;
+		}
+	}
+}
+
+.lg-cart-btn,
+.lg-whatsapp-pill,
+.lg-icon-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.45rem 0.85rem;
+	border-radius: 0.5rem;
+	border: 1px solid v.$color-borde;
+	background-color: v.$color-blanco;
+	color: v.$color-texto;
+	font-size: 0.82rem;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+
+	&__badge {
+		background-color: v.$color-rosa-oscuro;
+		color: v.$color-blanco;
+		border-radius: 999px;
+		padding: 0.1rem 0.45rem;
+		font-size: 0.75rem;
+	}
+}
+
+// Hero principal con animación Ken Burns en imágenes
+.lg-hero {
+	background: linear-gradient(180deg, v.$color-crema-calida 0%, v.$color-crema 100%);
+	padding: 3rem 0;
+	border-bottom: 1px solid v.$color-borde;
+
+	@include m.respond-to(lg) {
+		padding: 4.5rem 0;
+	}
+
+	&__subtitle {
+		color: v.$color-texto-suave;
+		font-size: 1.05rem;
+		margin: 1.1rem 0 1.75rem;
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+	}
+
+	&__media {
+		position: relative;
+		margin: 0;
+		border-radius: 1rem;
+		overflow: hidden;
+		border: 1px solid v.$color-borde;
+		aspect-ratio: 16 / 10;
+		background-color: v.$color-rosa-suave;
+	}
+
+	&__img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0;
+		transform: scale(1);
+		transition: opacity 0.9s ease, transform 6s ease-out;
+
+		&.is-active {
+			opacity: 1;
+			transform: scale(1.06);
+		}
+	}
+}
+
+// Secciones y movimiento suave en imágenes de tarjetas
+.lg-kicker {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
+	font-weight: 700;
+	color: v.$color-rose-gold;
+	margin-bottom: 0.4rem;
+}
+
+.lg-section {
+	padding: 3.5rem 0;
+
+	@include m.respond-to(md) {
+		padding: 4.5rem 0;
+	}
+
+	&--warm {
+		background-color: v.$color-crema-calida;
+		border-top: 1px solid v.$color-borde;
+		border-bottom: 1px solid v.$color-borde;
+	}
+
+	&__header {
+		margin-bottom: 2.25rem;
+	}
+}
+
+.lg-img-motion {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	@include m.transition-smooth(transform, 0.45s);
+}
+
+.lg-category-card,
+.lg-product-card {
+	background-color: v.$color-blanco;
+	border: 1px solid v.$color-borde;
+	border-radius: 0.9rem;
+	overflow: hidden;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	@include m.transition-smooth(transform box-shadow);
+
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 12px 26px rgba(35, 27, 28, 0.08);
+
+		.lg-img-motion {
+			transform: scale(1.06);
+		}
+	}
+
+	&__media {
+		margin: 0;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background-color: v.$color-crema-calida;
+	}
+
+	&__body {
+		padding: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	&__meta {
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: v.$color-texto-suave;
+		margin: 0;
+	}
+
+	&__desc {
+		font-size: 0.9rem;
+		color: v.$color-texto-suave;
+		margin: 0;
+	}
+
+	&__link {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: v.$color-rosa-oscuro;
+		text-decoration: none;
+	}
+
+	&__pricing {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+
+		.lg-price {
+			font-weight: 700;
+			font-size: 1.1rem;
+		}
+
+		.lg-price-old {
+			font-size: 0.85rem;
+			color: v.$color-texto-suave;
+			text-decoration: line-through;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-top: 0.4rem;
+	}
+}
+
+.lg-banner-custom {
+	background-color: v.$color-rosa-suave;
+	border: 1px solid #dec4c6;
+	border-radius: 1rem;
+	padding: 2rem;
+
+	&__media {
+		margin: 0;
+		border-radius: 0.75rem;
+		overflow: hidden;
+		aspect-ratio: 4 / 3;
+	}
+}
+
+// Footer y redes sociales
+.lg-footer {
+	background-color: v.$color-crema-calida;
+	border-top: 1px solid v.$color-borde;
+	padding: 3.5rem 0 2rem;
+
+	&__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		a {
+			display: inline-block;
+			padding: 0.25rem 0;
+			color: v.$color-texto-suave;
+			text-decoration: none;
+			font-size: 0.9rem;
+
+			&:hover {
+				color: v.$color-rosa-oscuro;
+			}
+		}
+	}
+
+	&__bottom {
+		margin-top: 2.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid v.$color-borde;
+		font-size: 0.82rem;
+		color: v.$color-texto-suave;
+		text-align: center;
+	}
+}
+
+.lg-social-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 1rem;
+
+	&__item {
+		padding: 0.45rem 0.9rem;
+		border-radius: 999px;
+		background-color: v.$color-blanco;
+		border: 1px solid v.$color-borde;
+		color: v.$color-texto;
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-decoration: none;
+
+		&:hover {
+			border-color: v.$color-rosa-oscuro;
+			color: v.$color-rosa-oscuro;
+		}
+	}
+}
+
+// Carrito lateral, botón flotante de WhatsApp y toast
+.lg-cart-drawer {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	max-width: 24rem;
+	background-color: v.$color-crema;
+	z-index: 1050;
+	display: flex;
+	flex-direction: column;
+	transform: translateX(100%);
+	@include m.transition-smooth(transform);
+
+	&.is-open {
+		transform: translateX(0);
+	}
+
+	&__header,
+	&__footer {
+		padding: 1.25rem;
+		background-color: v.$color-blanco;
+		border-bottom: 1px solid v.$color-borde;
+	}
+
+	&__footer {
+		border-top: 1px solid v.$color-borde;
+		border-bottom: 0;
+	}
+
+	&__body {
+		flex: 1;
+		overflow-y: auto;
+		padding: 1.25rem;
+	}
+
+	&__row {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 0.85rem;
+	}
+}
+
+.lg-backdrop {
+	position: fixed;
+	inset: 0;
+	background-color: rgba(35, 27, 28, 0.45);
+	z-index: 1040;
+	display: none;
+
+	&.is-visible {
+		display: block;
+	}
+}
+
+.lg-floating-whatsapp {
+	position: fixed;
+	bottom: 1.25rem;
+	left: 1.25rem;
+	z-index: 1035;
+	background-color: v.$color-texto;
+	color: v.$color-blanco;
+	padding: 0.7rem 1.15rem;
+	border-radius: 999px;
+	font-size: 0.85rem;
+	font-weight: 600;
+	text-decoration: none;
+	box-shadow: 0 8px 20px rgba(35, 27, 28, 0.22);
+}
+
+.lg-toast {
+	position: fixed;
+	bottom: 1.25rem;
+	right: 1.25rem;
+	z-index: 1060;
+	background-color: v.$color-rosa-oscuro;
+	color: v.$color-blanco;
+	padding: 0.8rem 1.2rem;
+	border-radius: 0.5rem;
+	font-size: 0.88rem;
+	opacity: 0;
+	pointer-events: none;
+	@include m.transition-smooth(opacity transform);
+
+	&.is-visible {
+		opacity: 1;
+	}
+}

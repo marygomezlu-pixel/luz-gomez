@@ -1,0 +1,27 @@
+// Mixins SASS para breakpoints responsivos (Mobile-first) y utilidades de diseño
+@use 'variables' as v;
+
+/* Aquí se usa un mixin para los breakpoints sm, md y lg */
+@mixin respond-to($breakpoint) {
+	@if $breakpoint == sm {
+		@media (min-width: #{v.$bp-sm}) {
+			@content;
+		}
+	} @else if $breakpoint == md {
+		@media (min-width: #{v.$bp-md}) {
+			@content;
+		}
+	} @else if $breakpoint == lg {
+		@media (min-width: #{v.$bp-lg}) {
+			@content;
+		}
+	} @else if $breakpoint == xl {
+		@media (min-width: #{v.$bp-xl}) {
+			@content;
+		}
+	}
+}
+
+@mixin transition-smooth($props: all, $duration: 0.25s) {
+	transition: $props $duration cubic-bezier(0.16, 1, 0.3, 1);
+}
